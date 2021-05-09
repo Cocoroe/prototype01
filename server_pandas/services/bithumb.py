@@ -23,9 +23,12 @@ CACHE_get_candlestick_TIME = CACHE_TIME_DAY_1
 CACHE_get_BULL_5 = "CACHE_get_BULL_5"
 CACHE_get_BULL_5_TIME = CACHE_TIME_DAY_1
 
+CACHE_get_current_price = "CACHE_get_current_price"
+CACHE_get_current_price_TIME = 1
+
 
 class BithumbService(object):
-    def __init__(self):
+    def __init__(self):  # ✅
         self.updatedat = datetime.datetime.now()
         self.config = dotenv_values(".env")
         config = self.config
@@ -36,39 +39,48 @@ class BithumbService(object):
             db=0,
         )
 
-    def __get_df_bull_5(self, ticker):
+    """ subscriber """
+    """
+        - bull 5
+    """
+
+    def __subscribe_bull_5(self, ticker):  # ✅
         tickers = self.get_tickers()
         if ticker not in tickers:
             return None
 
-        df_BTC = pybithumb.get_candlestick(ticker, chart_intervals="24h")
-        df_BTC["SMA_5"] = df_BTC["close"].rolling(5).mean()
-        df_BTC["BULL_5"] = df_BTC["SMA_5"] / df_BTC["close"]
-        return df_BTC
+        df_BULL_5 = pybithumb.get_candlestick(ticker, chart_intervals="24h")
+        df_BULL_5["SMA_5"] = df_BULL_5["close"].rolling(5).mean()
+        df_BULL_5["BULL_5"] = df_BULL_5["SMA_5"] / df_BULL_5["close"]
+        df_BULL_5 = df_BULL_5.reset_index()
+        return df_BULL_5
 
-    def subscribe_update(self):
+    def subscribe_update(self):  # ✅
         cache = self.cache
-        while True:
+        while True:  # 5초 주기로 ticker들의 데이터를 업데이트 확인 합니다.
             print("✔️ check coin update")
             time.sleep(5)
             tickers = self.get_tickers()
 
-            for ticker in tickers:
+            for ticker in tickers:  # 캐쉬된 데이터가 없다면 2초마다 ticker를 순회하며 데이터를 저장
                 cache_key = f"{CACHE_get_BULL_5}_{ticker}"
                 d = cache.get(cache_key)
                 if d:
                     pass
                 else:
-                    data = self.__get_df_bull_5(ticker)
-                    cache.setex(cache_key, CACHE_get_BULL_5_TIME, data)
-                    time.sleep(1)
-            print(tickers)
+                    print(f"✔️ update... {ticker}", end="")
+                    data = self.__subscribe_bull_5(ticker)
+                    # if data == None:
+                    # pass
+                    cache.setex(cache_key, CACHE_get_BULL_5_TIME, data.to_json())
+                    time.sleep(0.3)
+                    print(f" done ✔️")
 
     def get_updated(self):
         """최근 업데이트 날짜를 반환"""
         return self.updatedat
 
-    def get_tickers(self):
+    def get_tickers(self):  # ✅
         """
         사용중인 ticker리스트를 출력
         - caching json object
@@ -96,9 +108,34 @@ class BithumbService(object):
             cache.setex(CACHE_get_candlestick, CACHE_get_candlestick_TIME, data)
             return data
 
-    def get_nowPice(self):
+    def get_current_price(self):
+        """현재 가격 데이터 df_all를 가져와서,
+        bull_5 데이터를 df_all에 추가한다.
+        (단, bull_5 데이터가 캐쉬에 있을 경우만 )
+        """
         cache = self.cache
-        res = pybithumb.get_current_price("all")
-        df_all = pd.DataFrame(res["data"]).T
-        df_all = df_all.drop("date")
-        return df_all.to_json()
+        d = cache.get(CACHE_get_current_price)
+        if d:
+            return d
+        else:
+            res = pybithumb.get_current_price("all")
+            df_all = pd.DataFrame(res["data"]).T
+            df_all = df_all.drop("date")
+            decorate_bull_5(df_all)
+            cache.setex(
+                CACHE_get_current_price, CACHE_get_current_price_TIME, df_all.to_json()
+            )
+            return df_all.to_json()
+
+    """ decorator? middle ware? data pipe line ?  """
+
+    def decorate_bull_5(self, df_all):  # 비순수 함수
+        tickers = self.get_tickers()
+        if not df_all:
+            print("Error : df_all is null")
+            return None
+        for ticker in tickers:
+            df_BULL_5 = self.cache.get(f"{CACHE_get_BULL_5}_{ticker}")
+            if not df_BULL_5:
+                pass
+            df_all.loc[ticker, "BULL_5"] = df_BULL_5.iloc[-1]["BULL_5"]

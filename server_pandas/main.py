@@ -1,9 +1,8 @@
-from flask import Flask
+from flask import Flask, jsonify
 from dotenv import load_dotenv, dotenv_values
 from services.bithumb import BithumbService
 
 config = dotenv_values(".env")
-
 print("✔️ main")
 # python data processor server
 # ref : https://frhyme.github.io/python-lib/flask_pandas/
@@ -12,7 +11,7 @@ print("✔️ main")
 if __name__ == "__main__":
     """settings"""
     bithumbService = BithumbService()
-    bithumbService.subscribe_update()
+    # bithumbService.subscribe_update()
 
     """app"""
     app = Flask("pandasFlask")
@@ -24,7 +23,7 @@ if __name__ == "__main__":
         return "✅ server is running"
 
     @app.route("/ticker")
-    def get_tickers():
+    def get_tickers():  # ✅
         """코인 종류 제공"""
         return jsonify(bithumbService.get_tickers())
 
@@ -33,9 +32,9 @@ if __name__ == "__main__":
         """특정 코인의 가격 데이터"""
         return jsonify(bithumbService.get_ohlcv(ticker))
 
-    @app.route("/nowpice")
-    def get_price():
-        return jsonify(bithumbService.get_nowPice())
+    @app.route("/get_current_price")
+    def get_current_price():
+        return jsonify(bithumbService.get_current_price())
 
     # @app.route('/pandas')
     # def make_read_excel():
