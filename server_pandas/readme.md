@@ -21,6 +21,7 @@ git push https://[USER_NAME]@github.com/Cocoroe/prototype01.git
 ## installed package
 
 ```
+pip install setuptools quart
 pip install redis flask pybithumb
 pip install python-dotenv
 ```

@@ -1,12 +1,12 @@
 import json
-from dotenv import load_dotenv, dotenv_values
 import redis
-from flask import Flask, jsonify
 import pybithumb
 import pandas as pd
 import numpy as np
 import datetime
 import time
+import asyncio
+from dotenv import load_dotenv, dotenv_values
 
 print("✔️ BithumbService")
 
@@ -39,8 +39,7 @@ class BithumbService(object):
             db=0,
         )
 
-    """ subscriber """
-    """
+    """ subscriber 
         - bull 5
     """
 
@@ -55,11 +54,12 @@ class BithumbService(object):
         df_BULL_5 = df_BULL_5.reset_index()
         return df_BULL_5
 
-    def subscribe_update(self):  # ✅
+    async def subscribe_update(self):  # ✅
+        print("subscribe_update")
         cache = self.cache
         while True:  # 5초 주기로 ticker들의 데이터를 업데이트 확인 합니다.
             print("✔️ check coin update")
-            time.sleep(5)
+            await asyncio.sleep(10)
             tickers = self.get_tickers()
 
             for ticker in tickers:  # 캐쉬된 데이터가 없다면 2초마다 ticker를 순회하며 데이터를 저장
@@ -73,7 +73,7 @@ class BithumbService(object):
                     # if data == None:
                     # pass
                     cache.setex(cache_key, CACHE_get_BULL_5_TIME, data.to_json())
-                    time.sleep(0.3)
+                    await asyncio.sleep(1)
                     print(f" done ✔️")
 
     def get_updated(self):

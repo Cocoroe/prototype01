@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:client":"cd client && npm run start",
-    "start:flask":"cd server_pandas && python main.py"
+    "start:flask":"cd server_pandas && python app.py"
   },
   "repository": {
     "type": "git",
