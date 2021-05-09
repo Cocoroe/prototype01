@@ -12,7 +12,7 @@ print("✔️ main")
 if __name__ == "__main__":
     """settings"""
     bithumbService = BithumbService()
-    print(bithumbService.get_updated())
+    bithumbService.subscribe_update()
 
     """app"""
     app = Flask("pandasFlask")
@@ -26,12 +26,16 @@ if __name__ == "__main__":
     @app.route("/ticker")
     def get_tickers():
         """코인 종류 제공"""
-        return bithumbService.get_tickers()
+        return jsonify(bithumbService.get_tickers())
 
     @app.route("/ohlcv/<string:ticker>")
     def get_ohlcv(ticker):
         """특정 코인의 가격 데이터"""
-        return bithumbService.get_ohlcv(ticker)
+        return jsonify(bithumbService.get_ohlcv(ticker))
+
+    @app.route("/nowpice")
+    def get_price():
+        return jsonify(bithumbService.get_nowPice())
 
     # @app.route('/pandas')
     # def make_read_excel():

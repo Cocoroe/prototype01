@@ -29,7 +29,7 @@ pip install python-dotenv
 
 - caching API ( 2sec caching )
 
-```
+```python
   @app.route("/test")
   def test():
     d = cache.get("sec2")
@@ -42,7 +42,9 @@ pip install python-dotenv
       return "sec2_value"
 ```
 
-```
+- caching list en/de code json
+
+```python
   @app.route("/ticker")
   def get_tickers():
     """ caching json object """
@@ -53,4 +55,30 @@ pip install python-dotenv
       tickers = pybithumb.get_tickers()
       cache.setex(CACHE_TICKER,CACHE_TICKER_TIME,json.dumps(tickers))
       return jsonify(tickers)
+```
+
+- cahing dataframe en/decode json
+
+```python
+import redis
+cache = redis.Redis(
+            host="xxx",
+            port=int(6380),
+            password="xxx",
+            db=0,
+        )
+print(cache.get("dododo"))
+
+df_BTC = pybithumb.get_candlestick("BTC", chart_intervals="24h")
+df_BTC['SMA_5'] = df_BTC['close'].rolling(5).mean()
+df_BTC['BULL_5'] = df_BTC['SMA_5'] / df_BTC['close']
+df_BTC = df_BTC.reset_index()
+df_BTC
+cache.setex(f"CACHE_get_BULL_5_BTC",20,df_BTC.to_json())
+df_BTC.to_json()
+
+df_json_from_redis = cache.get("CACHE_get_BULL_5_BTC")
+print(df_json_from_redis)
+df_from_redis = pd.read_json(df_json_from_redis)
+df_from_redis
 ```
