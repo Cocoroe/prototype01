@@ -121,7 +121,8 @@ class BithumbService(object):
             res = pybithumb.get_current_price("all")
             df_all = pd.DataFrame(res["data"]).T
             df_all = df_all.drop("date")
-            decorate_bull_5(df_all)
+            print(df_all)
+            self.decorate_bull_5(df_all)
             cache.setex(
                 CACHE_get_current_price, CACHE_get_current_price_TIME, df_all.to_json()
             )
@@ -131,11 +132,9 @@ class BithumbService(object):
 
     def decorate_bull_5(self, df_all):  # 비순수 함수
         tickers = self.get_tickers()
-        if not df_all:
-            print("Error : df_all is null")
-            return None
         for ticker in tickers:
-            df_BULL_5 = self.cache.get(f"{CACHE_get_BULL_5}_{ticker}")
-            if not df_BULL_5:
+            df_BULL_5_json = self.cache.get(f"{CACHE_get_BULL_5}_{ticker}")
+            if not df_BULL_5_json:
                 pass
+            df_BULL_5 = pd.read_json(df_BULL_5_json)
             df_all.loc[ticker, "BULL_5"] = df_BULL_5.iloc[-1]["BULL_5"]
