@@ -1,0 +1,21 @@
+{
+  "name": "prototype01",
+  "version": "1.0.0",
+  "description": "## Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:client":"cd client && npm run start",
+    "start:flask":"cd server_pandas && python main.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cocoroe/prototype01.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cocoroe/prototype01/issues"
+  },
+  "homepage": "https://github.com/Cocoroe/prototype01#readme"
+}
