@@ -9,6 +9,8 @@
 2. setting .env
 ```
 
+## redis-cli
+
 ## git push
 
 ```
