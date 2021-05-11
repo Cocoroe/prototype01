@@ -1,77 +1,90 @@
 import { Table } from 'antd';
 import 'antd/dist/antd.css';
+import { useEffect, useState } from 'react';
+import {server_check, get_current_price} from '../api/TableData'
 
 const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
+    width: '20%',
   },
   {
     title: 'Price',
-    dataIndex: 'chinese',
+    dataIndex: 'show_price',
     sorter: {
-      compare: (a, b) => a.chinese - b.chinese,
-      multiple: 3,
+      compare: (a, b) => a.price - b.price,
+      multiple: 2,
     },
+    width: '30%',
   },
   {
     title: '전일대비',
-    dataIndex: 'math',
+    dataIndex: 'show_prev_compare',
     sorter: {
-      compare: (a, b) => a.math - b.math,
+      compare: (a, b) => a.prev_compare - b.prev_compare,
       multiple: 2,
     },
-    render: (text: number) => (text>0) ? <a style={{color: '#05c545'}}>{text}</a> : <a style={{color: '#ff3d00'}}>{text}</a>,
+    width: '30%',
+    render: (text: string) => (text[0]!=='-') ? <a style={{color: '#05c545'}}>{text}</a> : <a style={{color: '#ff3d00'}}>{text}</a>,
   },
   {
-    title: 'Transaction Amount',
-    dataIndex: 'english',
+    title: '이동 평균 상승',
+    dataIndex: 'show_bull',
     sorter: {
-      compare: (a, b) => a.english - b.english,
-      multiple: 1,
+      compare: (a, b) => a.bull - b.bull,
+      multiple: 2,
     },
-    render: (text: number) => <a style={{color: '#05c545'}}>{text}</a>,
+    width: '20%',
+    render: (text: number) => (text >= 1) ? <a style={{color: '#05c545'}}>{text}</a> : <a style={{color: '#ff3d00'}}>{text}</a>,
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    chinese: 98,
-    math: 60,
-    english: 70,
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    chinese: 98,
-    math: -66,
-    english: 89,
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    chinese: 98,
-    math: 90,
-    english: 70,
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    chinese: 88,
-    math: 99,
-    english: 89,
-  },
-];
-
-function onChange(pagination, filters, sorter, extra) {
-  console.log('params', pagination, filters, sorter, extra);
-}
-const TableExample = () => (
-  <div>
-    <Table columns={columns} dataSource={data} onChange={onChange} />
-  </div>
-);
+const TableExample = () => {
+  type Row = {
+    key: string, 
+    name: string, 
+    show_price: string, 
+    show_prev_compare: string, 
+    show_bull: string, 
+    price: string, 
+    prev_compare: number, 
+    bull: string
+  };
+  const [dataSource, setData] = useState<Row[]>([]);
+  useEffect(() => {
+    (async () => {
+      await server_check();
+      const data = await get_current_price();
+      let arr: string[] = [];
+      for (let key in data) {
+        arr.push(key);
+      }
+      let temp: Row[] = [];
+      for (let i = 0; i < arr.length; i++){
+        let compare_number: number = (data[arr[i]].closing_price-data[arr[i]].prev_closing_price)/data[arr[i]].prev_closing_price*100
+        let compare:string = compare_number.toFixed(2);
+        let bull:string = data[arr[i]].BULL_5? data[arr[i]].BULL_5.toFixed(2) : '';
+        let obj: Row = {
+          key: `${i}`,
+          name: arr[i], 
+          show_price: data[arr[i]].closing_price.replace(/\B(?=(\d{3})+(?!\d))/g, ','), 
+          show_prev_compare: compare.replace(/\B(?=(\d{3})+(?!\d))/g, ',')+'%', 
+          show_bull: bull.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          price: data[arr[i]].closing_price, 
+          prev_compare: compare_number, 
+          bull: data[arr[i]].BULL_5
+        }
+        temp.push(obj);
+      }
+      setData(temp);
+    })();
+  }, []);
+  return (
+    <div>
+      <Table columns={columns} dataSource={dataSource}/>
+    </div>
+  );
+};
 
 export default TableExample;

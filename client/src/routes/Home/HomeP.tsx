@@ -8,8 +8,8 @@ const HomeP = () => {
   return (
     <div>
       <TradingView />
-      <TabExample />
-      <ExampleStyled text="hello there" color={"BLUE"} />
+      {/* <TabExample /> */}
+      {/* <ExampleStyled text="hello there" color={"BLUE"} /> */}
       <TableExample/>
     </div>
   );
