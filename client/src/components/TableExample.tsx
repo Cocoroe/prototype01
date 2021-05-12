@@ -19,7 +19,7 @@ const columns = [
     width: '30%',
   },
   {
-    title: '전일대비',
+    title: 'Change',
     dataIndex: 'show_prev_compare',
     sorter: {
       compare: (a, b) => a.prev_compare - b.prev_compare,
@@ -29,7 +29,7 @@ const columns = [
     render: (text: string) => (text[0]!=='-') ? <a style={{color: '#05c545'}}>{text}</a> : <a style={{color: '#ff3d00'}}>{text}</a>,
   },
   {
-    title: '이동 평균 상승',
+    title: 'Moving Average',
     dataIndex: 'show_bull',
     sorter: {
       compare: (a, b) => a.bull - b.bull,
