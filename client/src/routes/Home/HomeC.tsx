@@ -2,7 +2,14 @@ import React from "react";
 import HomeP from "./HomeP";
 
 const HomeC = () => {
-  return <HomeP />;
+  const [selectedTicker, setSelectedTicker] = React.useState<string>();
+
+  return (
+    <HomeP
+      selectedTicker={selectedTicker}
+      setSelectedTicker={setSelectedTicker}
+    />
+  );
 };
 
 export default HomeC;

@@ -11,7 +11,13 @@ const columns = [
     width: "20%",
     render: (name) => {
       return (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
           <img
             width="16px"
             height="16px"
@@ -23,7 +29,7 @@ const columns = [
               e.currentTarget.style.display = "none";
             }}
           ></img>
-          {name}
+          <span data-ticker={name}>{name}</span>
         </div>
       );
     },
@@ -47,9 +53,9 @@ const columns = [
     width: "30%",
     render: (text: string) =>
       text[0] !== "-" ? (
-        <a style={{ color: "#26A69A" }}>{text}</a>
+        <span style={{ color: "#26A69A" }}>{text}</span>
       ) : (
-        <a style={{ color: "#EF5350" }}>{text}</a>
+        <span style={{ color: "#EF5350" }}>{text}</span>
       ),
   },
   {
@@ -69,7 +75,12 @@ const columns = [
   },
 ];
 
-const TableExample = () => {
+interface ITableExample {
+  setSelectedTicker: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
+const TableExample: React.FunctionComponent<ITableExample> = ({
+  setSelectedTicker,
+}) => {
   type Row = {
     key: string;
     name: string;
@@ -120,7 +131,25 @@ const TableExample = () => {
   }, []);
   return (
     <TableStyled>
-      <Table columns={columns} dataSource={dataSource} />
+      <Table
+        onRow={(record, rowIndex) => {
+          return {
+            // 행 클릭시 ticker 반환
+            onClick: (event) => {
+              const ticker =
+                event.currentTarget.querySelector(
+                  "span[data-ticker]"
+                )?.innerHTML;
+              // console.log(ticker);
+              setSelectedTicker(ticker);
+            }, // click row
+            onDoubleClick: (event) => {}, // double click row
+          };
+        }}
+        columns={columns}
+        dataSource={dataSource}
+        pagination={{ pageSize: 30 }}
+      />
     </TableStyled>
   );
 };

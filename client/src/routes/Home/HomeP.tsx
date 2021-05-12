@@ -4,13 +4,22 @@ import React from "react";
 import TradingView from "components/TradingView";
 import TableExample from "components/TableExample";
 
-const HomeP = () => {
+interface IHomeP {
+  selectedTicker: string | undefined;
+  setSelectedTicker: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
+
+const HomeP: React.FunctionComponent<IHomeP> = ({
+  selectedTicker,
+  setSelectedTicker,
+}) => {
+  console.log("changed selectedTicker", selectedTicker);
   return (
     <div>
-      <TradingView theme="dark" symbol="ETH" />
+      <TradingView theme="dark" symbol={selectedTicker} />
       {/* <TabExample /> */}
       {/* <ExampleStyled text="hello there" color={"BLUE"} /> */}
-      <TableExample />
+      <TableExample setSelectedTicker={setSelectedTicker} />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import HomeC from "routes/Home/HomeC";
 import Footer from "components/Footer";
 import { ThemeProvider } from "styled-components";
 import theme from "styles/theme";
+
 function App() {
   return (
     <>
