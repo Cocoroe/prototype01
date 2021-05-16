@@ -116,17 +116,20 @@ class BithumbService(object):
         cache = self.cache
         d = cache.get(CACHE_get_current_price)
         if d:
+            print("✔ get_current_price cache hit")
             return d
         else:
             res = pybithumb.get_current_price("all")
             df_all = pd.DataFrame(res["data"]).T
             df_all = df_all.drop("date")
-            print(df_all)
+            # print(df_all)
             self.decorate_bull_5(df_all)
             cache.setex(
-                CACHE_get_current_price, CACHE_get_current_price_TIME, df_all.to_json()
+                CACHE_get_current_price,
+                CACHE_get_current_price_TIME,
+                df_all.T.to_json(),
             )
-            return df_all.to_json()
+            return df_all.T.to_json()
 
     """ decorator? middle ware? data pipe line ?  """
 

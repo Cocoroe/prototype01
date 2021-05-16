@@ -3,6 +3,7 @@ import asyncio
 # from flask import Flask, jsonify
 from dotenv import load_dotenv, dotenv_values
 from quart import Quart, jsonify
+from quart_cors import cors
 from services.bithumb import BithumbService
 
 config = dotenv_values(".env")
@@ -13,6 +14,7 @@ if __name__ == "__main__":
     # bithumbService.subscribe_update()
     """app"""
     app = Quart("pandasFlask")
+    app = cors(app, allow_origin="*")
 
     """router"""
 
@@ -38,7 +40,7 @@ if __name__ == "__main__":
     loop.run_until_complete(
         asyncio.gather(
             app.run_task(debug=True, host=config["HOST"], port=int(config["PORT"])),
-            # bithumbService.subscribe_update(),
+            bithumbService.subscribe_update(),
         )
     )
     loop.close()
