@@ -1,5 +1,3 @@
-# Deprecated -- pyenv > conda evn 로 옮김 ( server_pandas2 )
-
 ## python flask pandas data process server
 
 - 목적 : 코인 데이터 처리 및 serve
@@ -27,10 +25,6 @@ pip install setuptools quart
 pip install redis flask pybithumb
 pip install python-dotenv
 ```
-
-conda install setuptools quart
-conda install redis flask pybithumb
-conda install python-dotenv
 
 ## example code
 

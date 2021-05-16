@@ -1,6 +1,6 @@
 // 1 ---- 10 : dark ----- light
 
-export default {
+const theme = {
   pinkColor: "pink",
   blueColor: "blue",
 
@@ -14,3 +14,5 @@ export default {
   redColor1: "#EF5350",
   greenColor1: "#26A69A",
 };
+
+export default theme;

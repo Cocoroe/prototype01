@@ -44,7 +44,7 @@ const columns = [
     width: "30%",
   },
   {
-    title: "전일대비",
+    title: "Change",
     dataIndex: "show_prev_compare",
     sorter: {
       compare: (a, b) => a.prev_compare - b.prev_compare,
@@ -59,7 +59,7 @@ const columns = [
       ),
   },
   {
-    title: "이동 평균 상승",
+    title: "Moving Average",
     dataIndex: "show_bull",
     sorter: {
       compare: (a, b) => a.bull - b.bull,
@@ -68,9 +68,9 @@ const columns = [
     width: "20%",
     render: (text: number) =>
       text >= 1 ? (
-        <a style={{ color: "#26A69A" }}>{text}</a>
+        <span style={{ color: "#26A69A" }}>{text}</span>
       ) : (
-        <a style={{ color: "#EF5350" }}>{text}</a>
+        <span style={{ color: "#EF5350" }}>{text}</span>
       ),
   },
 ];
