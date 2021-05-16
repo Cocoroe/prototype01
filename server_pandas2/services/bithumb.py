@@ -129,10 +129,13 @@ class BithumbService(object):
         if d:
             return d
         else:
+            tickers_filtered = self.get_tickers()
             res = pybithumb.get_current_price("all")
             df_all = pd.DataFrame(res["data"]).T
             df_all = df_all.drop("date")
+            df_all = df_all.drop(list(set(df_all.index) - set(tickers_filtered)))
             self.decorate_technical_data(df_all)
+            df_all = df_all.T
             cache.setex(
                 CACHE_get_current_price, CACHE_get_current_price_TIME, df_all.to_json()
             )

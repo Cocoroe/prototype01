@@ -92,6 +92,7 @@ const TableExample: React.FunctionComponent<ITableExample> = ({
     bull: string;
   };
   const [dataSource, setData] = useState<Row[]>([]);
+
   useEffect(() => {
     (async () => {
       await server_check();
@@ -100,7 +101,11 @@ const TableExample: React.FunctionComponent<ITableExample> = ({
       for (let key in data) {
         arr.push(key);
       }
+      
+      console.log(arr.length,data.length);
+
       let temp: Row[] = [];
+
       for (let i = 0; i < arr.length; i++) {
         let compare_number: number =
           ((data[arr[i]].closing_price - data[arr[i]].prev_closing_price) /
@@ -129,6 +134,7 @@ const TableExample: React.FunctionComponent<ITableExample> = ({
       setData(temp);
     })();
   }, []);
+
   return (
     <TableStyled>
       <Table
