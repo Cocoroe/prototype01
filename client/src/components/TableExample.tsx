@@ -68,9 +68,9 @@ const columns = [
     width: "20%",
     render: (text: number) =>
       text >= 1 ? (
-        <a style={{ color: "#26A69A" }}>{text}</a>
+        <span style={{ color: "#26A69A" }}>{text}</span>
       ) : (
-        <a style={{ color: "#EF5350" }}>{text}</a>
+        <span style={{ color: "#EF5350" }}>{text}</span>
       ),
   },
 ];
