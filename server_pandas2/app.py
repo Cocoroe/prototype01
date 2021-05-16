@@ -1,9 +1,8 @@
 import asyncio
 import redis
-
-# from flask import Flask, jsonify
 from dotenv import load_dotenv, dotenv_values
 from quart import Quart, jsonify
+from quart_cors import cors
 from services.bithumb import BithumbService
 
 config = dotenv_values(".env")
@@ -19,6 +18,7 @@ async def main():
     )
     bithumbService = BithumbService(cache=cache, config=config)
     app = Quart("pandasFlask")
+    app = cors(app, allow_origin="*")
 
     @app.route("/")
     async def home():
