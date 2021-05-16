@@ -44,7 +44,7 @@ const columns = [
     width: "30%",
   },
   {
-    title: "전일대비",
+    title: "Change",
     dataIndex: "show_prev_compare",
     sorter: {
       compare: (a, b) => a.prev_compare - b.prev_compare,
@@ -59,7 +59,7 @@ const columns = [
       ),
   },
   {
-    title: "이동 평균 상승",
+    title: "Moving Average",
     dataIndex: "show_bull",
     sorter: {
       compare: (a, b) => a.bull - b.bull,
