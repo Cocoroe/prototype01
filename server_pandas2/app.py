@@ -38,7 +38,7 @@ async def main():
     async def get_current_price():
         return bithumbService.get_current_price()
 
-    coinUpdater = asyncio.create_task(bithumbService.subscribe_update())
+    coinUpdater = asyncio.create_task(bithumbService.subscribe_checker())
     await app.run_task(debug=True, host=config["HOST"], port=int(config["PORT"]))
 
 

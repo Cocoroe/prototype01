@@ -35,16 +35,13 @@ class BithumbService(object):
         except:
             print("Error config is not sufficient")
 
-    """ subscriber 
-        - bull 5
-    """
-
+    # [ getter-checker-*updater ]
     # 가격 데이터 연산 부분
     # 개별 종목 가격데이터 수집
     # *이평선 데이터 추가
     # *변동성 데이터 추가
     # *모멘텀 데이터 추가
-    async def __subscribe_bull_5(self, ticker):  # ✅
+    async def __subscribe_updater(self, ticker):  # ✅
         tickers = self.get_tickers()
         if ticker not in tickers:
             return None
@@ -54,8 +51,9 @@ class BithumbService(object):
         df_BULL_5 = df_BULL_5.reset_index()
         return df_BULL_5
 
+    # [ getter-*checker-updater ]
     # 코인 종목들의 가격 데이터를 업데이트 합니다.
-    async def subscribe_update(self):
+    async def subscribe_checker(self):
         print("subscribe_update")
         cache = self.cache
         while True:  # 5초 주기로 ticker들의 데이터를 업데이트 확인 합니다.
@@ -70,11 +68,12 @@ class BithumbService(object):
                     pass
                 else:
                     print(f"✔️ update... {ticker}", end="")
-                    data = await self.__subscribe_bull_5(ticker)
+                    data = await self.__subscribe_updater(ticker)
                     cache.setex(cache_key, CACHE_get_BULL_5_TIME, data.to_json())
                     await asyncio.sleep(0.1)
                     print(f" done ✔️")
 
+    # [ *getter-checker-updater ]
     def get_updated(self):
         """최근 업데이트 날짜를 반환"""
         return self.updatedat
@@ -100,8 +99,8 @@ class BithumbService(object):
                     tickers,
                 )
             )
-            print(tickers)  # tickers list
-            print(len(tickers))  # 97 장 형성
+            print("tickers list : ", tickers)  # tickers list
+            print("tickers len : ", len(tickers))  # 97 장 형성
             cache.setex(CACHE_get_tickers, CACHE_get_tickers_TIME, json.dumps(tickers))
         return tickers
 
@@ -120,7 +119,8 @@ class BithumbService(object):
             return data
 
     def get_current_price(self):
-        """현재 가격 데이터 df_all를 가져와서,
+        """
+        현재 가격 데이터 df_all를 가져와서,
         bull_5 데이터를 df_all에 추가한다.
         (단, bull_5 데이터가 캐쉬에 있을 경우만 )
         """
@@ -133,7 +133,7 @@ class BithumbService(object):
             df_all = pd.DataFrame(res["data"]).T
             df_all = df_all.drop("date")
             print(df_all)
-            self.decorate_bull_5(df_all)
+            self.decorate_technical_data(df_all)
             cache.setex(
                 CACHE_get_current_price, CACHE_get_current_price_TIME, df_all.to_json()
             )
@@ -141,11 +141,15 @@ class BithumbService(object):
 
     """ decorator? middle ware? data pipe line ?  """
 
-    def decorate_bull_5(self, df_all):  # 비순수 함수
+    def decorate_technical_data(self, df_all):  # 비순수 함수
         tickers = self.get_tickers()
         for ticker in tickers:
             df_BULL_5_json = self.cache.get(f"{CACHE_get_BULL_5}_{ticker}")
             if not df_BULL_5_json:
                 pass
             df_BULL_5 = pd.read_json(df_BULL_5_json)
-            df_all.loc[ticker, "BULL_5"] = df_BULL_5.iloc[-1]["BULL_5"]
+            # df_all.loc[ticker, "BULL_5"] = df_BULL_5.iloc[-1]["BULL_5"]
+            df_all.loc[ticker, "BULL_5"] = (
+                int(df_all.loc[ticker, "closing_price"]) / df_BULL_5.iloc[-2]["SMA_5"]
+            )
+
