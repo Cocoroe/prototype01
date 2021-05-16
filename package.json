@@ -4,9 +4,11 @@
   "description": "## Demo",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "install:client":"cd client && npm i",
+    "install:flask":"cd server_pandas2 && pip install -r requirements.txt",
+    "install":"npm run install:client && npm run install:flask",
     "start:client":"cd client && npm run start",
-    "start:flask":"cd server_pandas && python app.py"
+    "start:flask":"cd server_pandas2 && python app.py"
   },
   "repository": {
     "type": "git",

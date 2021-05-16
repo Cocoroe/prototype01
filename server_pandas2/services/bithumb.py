@@ -132,24 +132,34 @@ class BithumbService(object):
             res = pybithumb.get_current_price("all")
             df_all = pd.DataFrame(res["data"]).T
             df_all = df_all.drop("date")
-            print(df_all)
             self.decorate_technical_data(df_all)
             cache.setex(
                 CACHE_get_current_price, CACHE_get_current_price_TIME, df_all.to_json()
             )
+            print(df_all)
             return df_all.to_json()
 
     """ decorator? middle ware? data pipe line ?  """
 
     def decorate_technical_data(self, df_all):  # 비순수 함수
         tickers = self.get_tickers()
+        print(f"tickers len : {len(tickers)}")
         for ticker in tickers:
-            df_BULL_5_json = self.cache.get(f"{CACHE_get_BULL_5}_{ticker}")
-            if not df_BULL_5_json:
-                pass
-            df_BULL_5 = pd.read_json(df_BULL_5_json)
-            # df_all.loc[ticker, "BULL_5"] = df_BULL_5.iloc[-1]["BULL_5"]
-            df_all.loc[ticker, "BULL_5"] = (
-                int(df_all.loc[ticker, "closing_price"]) / df_BULL_5.iloc[-2]["SMA_5"]
-            )
+            try:
+                df_BULL_5_json = self.cache.get(f"{CACHE_get_BULL_5}_{ticker}")
+                df_BULL_5 = pd.read_json(df_BULL_5_json)
+                # df_all.loc[ticker, "BULL_5"] = df_BULL_5.iloc[-1]["BULL_5"]
+                if df_all.loc[ticker, "closing_price"] == np.nan:
+                    print("closing_price is not exits")
+                    raise Exception()
+                if df_BULL_5.iloc[-2]["SMA_5"] == np.nan:
+                    print("SMA_5 is not exits")
+                    raise Exception()
 
+                df_all.loc[ticker, "BULL_5"] = (
+                    float(df_all.loc[ticker, "closing_price"])
+                    / df_BULL_5.iloc[-2]["SMA_5"]
+                )
+            except:
+                print(f"error : decorate_technical_data : {ticker}")
+                return
