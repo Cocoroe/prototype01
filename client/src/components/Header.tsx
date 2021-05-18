@@ -9,8 +9,13 @@ const HeaderDiv = styled.div`
   background-color: ${(props) => props.theme.blackColor1};
   color: ${(props) => props.theme.whiteColor1};
 `;
-const Header = () => {
-  return <HeaderDiv>QuantCo</HeaderDiv>;
+
+interface IHeader { 
+  text:string|undefined
+}
+
+const Header:React.FunctionComponent<IHeader> = ({text}) => {
+  return <HeaderDiv>{text}</HeaderDiv>;
 };
 
 export default Header;

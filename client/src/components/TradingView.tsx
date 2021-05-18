@@ -31,7 +31,7 @@ export default class TradingView extends Component<PTradingView, STradingView> {
       width: this.props.width || "100%",
       height: this.props.height || 610,
       symbol: this.props.symbol,
-      interval: "1",
+      interval: "60",
       timezone: "Etc/UTC",
       theme: "dark",
       style: "1",

@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Header />
+        <Header text="QuantCo" />
         <HomeC />
         <Footer />
       </ThemeProvider>

@@ -3,6 +3,9 @@ import React from "react";
 // import ExampleStyled from "components/ExampleStyled";
 import TradingView from "components/TradingView";
 import TableExample from "components/TableExample";
+import Strategy13 from "components/strategy/Strategy13";
+import Header from "components/Header";
+import StrategyDesc from "components/StrategyDesc";
 
 interface IHomeP {
   selectedTicker: string | undefined;
@@ -19,6 +22,20 @@ const HomeP: React.FunctionComponent<IHomeP> = ({
       <TradingView theme="dark" symbol={selectedTicker} />
       {/* <TabExample /> */}
       {/* <ExampleStyled text="hello there" color={"BLUE"} /> */}
+      <Header text="Strategy13" />
+      <StrategyDesc
+        title="전략 S13. 슈퍼상승장 + 변동성 돌파"
+        longText={`
+- 조건1 : 3,5,10,20(일) 이평선 <= 현재가  
+- 조건2 : 변동성 돌파 만족 ( k=0.5 ) `}
+        shortText="
+매도 타이밍 (2가지)
+1. 변동성 돌파 전략 : 24시간
+2. 이동편균 전략 : 이평선 이하로 하락하면 매도 
+        "
+      />
+      <Strategy13 setSelectedTicker={setSelectedTicker} />
+      <Header text="ALL Coins" />
       <TableExample setSelectedTicker={setSelectedTicker} />
     </div>
   );
