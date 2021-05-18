@@ -33,6 +33,10 @@ const HomeP: React.FunctionComponent<IHomeP> = ({
 1. 변동성 돌파 전략 : 24시간
 2. 이동편균 전략 : 이평선 이하로 하락하면 매도 
         "
+        reportText="
+Ref: 가상화폐 투자 마법 공식 13
+복리수익 63.50% | MDD 2.51% | 승률 60.64% | 손익비 2.73 | 1일 1% 이상 손실 11회
+        "
       />
       <Strategy13 setSelectedTicker={setSelectedTicker} />
       <Header text="ALL Coins" />
