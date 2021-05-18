@@ -2,9 +2,20 @@
 
 ## Demo
 
-[https://objective-austin-62e721.netlify.app/](https://objective-austin-62e721.netlify.app/)
+[http://quantco.xyz/](http://quantco.xyz/)
 
-### TODO
+## 구현 된 전략
 
-- Chart-Library ( TradingView )
-- Grid View
+```js
+전략 S13. 슈퍼상승장 + 변동성 돌파
+
+- 조건1 : 3,5,10,20(일) 이평선 <= 현재가
+- 조건2 : 변동성 돌파 만족 ( k=0.5 )
+
+매도 타이밍 (2가지)
+1. 변동성 돌파 전략 : 24시간
+2. 이동편균 전략 : 이평선 이하로 하락하면 매도
+
+Ref: 가상화폐 투자 마법 공식 13
+복리수익 63.50% | MDD 2.51% | 승률 60.64% | 손익비 2.73 | 1일 1% 이상 손실 11회
+```
