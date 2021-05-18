@@ -38,10 +38,17 @@ async def main():
     async def get_current_price():
         return bithumbService.get_current_price()
 
+    @app.route("/get_S13_coins")
+    async def get_S13_coins():
+        return bithumbService.get_S13_coins()
+
+    @app.route("/get_technical_data/<string:ticker>")
+    async def get_technical_data(ticker):
+        return bithumbService.get_technical_data(ticker)
+
     coinUpdater = asyncio.create_task(bithumbService.subscribe_checker())
     await app.run_task(debug=True, host=config["HOST"], port=int(config["PORT"]))
 
 
 if __name__ == "__main__":
     asyncio.run(main())
-
