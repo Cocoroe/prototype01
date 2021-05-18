@@ -140,7 +140,7 @@ const Strategy13: React.FunctionComponent<IStrategy13> = ({
       }
     }
 
-    // fetchData()
+    fetchData()
     const interval_fetch = setInterval(fetchData,10000)
     return ()=>{
       clearInterval(interval_fetch)

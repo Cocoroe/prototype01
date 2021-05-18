@@ -26,12 +26,15 @@ const HomeP: React.FunctionComponent<IHomeP> = ({
       <StrategyDesc
         title="전략 S13. 슈퍼상승장 + 변동성 돌파"
         longText={`
-- 조건1 : 3,5,10,20(일) 이평선 <= 현재가  
-- 조건2 : 변동성 돌파 만족 ( k=0.5 ) `}
+- 조건1 : 3,5,10,20(일) 이평선 < 현재가
+(SMA3, SMA5, SMA10, SMA10, SMA20 < NOW_PRICE )
+- 조건2 : 변동성 돌파 만족 ( k=0.5 )
+( OPEN_PRICE + (HIGH - LOW)*0.5 < NOW_PRICE)
+`}
         shortText="
 매도 타이밍 (2가지)
 1. 변동성 돌파 전략 : 24시간
-2. 이동편균 전략 : 이평선 이하로 하락하면 매도 
+2. 이동평균 전략 : 이평선 이하로 하락하면 매도 
         "
         reportText="
 Ref: 가상화폐 투자 마법 공식 13

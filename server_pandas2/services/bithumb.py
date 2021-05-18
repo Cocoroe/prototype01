@@ -23,11 +23,11 @@ CACHE_get_TECH_DATA = "CACHE_get_TECH_DATA"
 CACHE_get_TECH_DATA_TIME = CACHE_TIME_DAY_1
 
 CACHE_get_current_price = "CACHE_get_current_price"
-CACHE_get_current_price_TIME = 1
+CACHE_get_current_price_TIME = 5
 
 
 CACHE_get_S13_coins = "CACHE_get_S13_coins"
-CACHE_get_S13_coins_TIME = 1
+CACHE_get_S13_coins_TIME = 600
 
 """
 

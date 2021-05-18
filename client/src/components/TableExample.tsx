@@ -141,7 +141,7 @@ const TableExample: React.FunctionComponent<ITableExample> = ({
     }
 
     // fetchData()
-    const interval_fetch = setInterval(fetchData,1000)
+    const interval_fetch = setInterval(fetchData,3000)
     return ()=>{
       clearInterval(interval_fetch)
     }
