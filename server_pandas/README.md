@@ -7,13 +7,15 @@
 ```
 1. setting virtualenv
 2. pip install requirements.txt
-3. setting .env
+3. make file .env
 ```
 
 ### 1. virtualenv
 
 ```
 virtualenv env  --python=python3.8
+source env/bin/activate
+
 ```
 
 ### 2. requirements.txt
