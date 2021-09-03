@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const server_check = async () => {
     try {
-        const { data } = await axios.get(`http://133.186.229.72:4100`);
+        const { data } = await axios.get(`http://220.120.124.52:14000`);
         // console.log(data);
         return data
     } catch (e) {
@@ -14,7 +14,7 @@ export const server_check = async () => {
 
 export const get_current_price = async () => {
     try {
-        const { data } = await axios.get(`http://133.186.229.72:4100/get_current_price`);
+        const { data } = await axios.get(`http://220.120.124.52:14000/get_current_price`);
         return data;
     } catch (e) {
         throw e;
@@ -39,7 +39,7 @@ export type CurrentPrice =  {
 
 export const get_S13_coins = async () => {
     try {
-        const { data } = await axios.get(`http://133.186.229.72:4100/get_S13_coins`);
+        const { data } = await axios.get(`http://220.120.124.52:14000/get_S13_coins`);
         return data;
     } catch (e) {
         throw e;

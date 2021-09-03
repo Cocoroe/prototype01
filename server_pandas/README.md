@@ -1,5 +1,3 @@
-# Deprecated -- pyenv > conda evn 로 옮김 ( server_pandas2 )
-
 ## python flask pandas data process server
 
 - 목적 : 코인 데이터 처리 및 serve
@@ -7,30 +5,48 @@
 ## install
 
 ```
-1. pip install requirements.txt
-2. setting .env
+1. setting virtualenv
+2. pip install requirements.txt
+3. setting .env
 ```
 
-## redis-cli
-
-## git push
+### 1. virtualenv
 
 ```
-git push https://dosimpact@github.com/Cocoroe/prototype01.git
-git push https://[USER_NAME]@github.com/Cocoroe/prototype01.git
+virtualenv env  --python=python3.8
 ```
 
-## installed package
+### 2. requirements.txt
 
 ```
-pip install setuptools quart
+pip install setuptools quart quart_cors
 pip install redis flask pybithumb
 pip install python-dotenv
 ```
 
-conda install setuptools quart
-conda install redis flask pybithumb
-conda install python-dotenv
+### 3. .env
+
+```
+# Development settings example
+DOMAIN=example.org
+ADMIN_EMAIL=admin@${DOMAIN}
+ROOT_URL=${DOMAIN}/app
+
+
+# Flask Settings
+PORT = 4000
+HOST = 0.0.0.0
+
+# REDIS Settings
+REDIS_HOST = 192.168.0.1
+REDIS_PORT =  15000
+REDIS_PASSWORD = PASS_WORD
+
+REDIS_URI = redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/0
+
+# REDIS CLI 
+# redis-cli -h 192.168.0.1 -p 15000 -a PASS_WORD
+```
 
 ## example code
 

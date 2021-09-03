@@ -1,6 +1,5 @@
 import asyncio
-
-# from flask import Flask, jsonify
+import redis
 from dotenv import load_dotenv, dotenv_values
 from quart import Quart, jsonify
 from quart_cors import cors
@@ -9,14 +8,17 @@ from services.bithumb import BithumbService
 config = dotenv_values(".env")
 print("✔️ main")
 
-if __name__ == "__main__":
-    bithumbService = BithumbService()
-    # bithumbService.subscribe_update()
-    """app"""
+
+async def main():
+    cache = redis.Redis(
+        host=config["REDIS_HOST"],
+        port=int(config["REDIS_PORT"]),
+        password=config["REDIS_PASSWORD"],
+        db=0,
+    )
+    bithumbService = BithumbService(cache=cache, config=config)
     app = Quart("pandasFlask")
     app = cors(app, allow_origin="*")
-
-    """router"""
 
     @app.route("/")
     async def home():
@@ -36,11 +38,17 @@ if __name__ == "__main__":
     async def get_current_price():
         return bithumbService.get_current_price()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(
-        asyncio.gather(
-            app.run_task(debug=True, host=config["HOST"], port=int(config["PORT"])),
-            bithumbService.subscribe_update(),
-        )
-    )
-    loop.close()
+    @app.route("/get_S13_coins")
+    async def get_S13_coins():
+        return bithumbService.get_S13_coins()
+
+    @app.route("/get_technical_data/<string:ticker>")
+    async def get_technical_data(ticker):
+        return bithumbService.get_technical_data(ticker)
+
+    coinUpdater = asyncio.create_task(bithumbService.subscribe_checker())
+    await app.run_task(debug=True, host=config["HOST"], port=int(config["PORT"]))
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
