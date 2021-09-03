@@ -4,11 +4,9 @@
   "description": "## Demo",
   "main": "index.js",
   "scripts": {
-    "install:client": "cd client && npm i",
-    "install:flask": "cd server_pandas2 && pip install -r requirements.txt",
-    "install": "npm run install:client && npm run install:flask",
     "start:client": "cd client && npm run start",
-    "start:flask": "cd server_pandas2 && python app.py"
+    "start:flask": "cd server_pandas2 && python app.py",
+    "dev": "concurrently --kill-others=on-fail \"cd ./server_pandas && python app.py\" \"cd ./server_node && yarn start\""
   },
   "repository": {
     "type": "git",
@@ -21,6 +19,7 @@
   },
   "homepage": "https://github.com/Cocoroe/prototype01#readme",
   "dependencies": {
+    "concurrently": "^6.2.1",
     "lite-server": "^2.6.1"
   }
 }
